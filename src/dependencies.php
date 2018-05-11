@@ -1,5 +1,7 @@
 <?php
 // DIC configuration
+use Doctrine\DBAL\Configuration as DoctrineConfiguration;
+use Doctrine\DBAL\DriverManager as DoctrineManager;
 
 $container = $app->getContainer();
 
@@ -7,15 +9,6 @@ $container = $app->getContainer();
 $container['renderer'] = function ($c) {
     $settings = $c->get('settings')['renderer'];
     return new Slim\Views\PhpRenderer($settings['template_path']);
-};
-
-// monolog
-$container['logger'] = function ($c) {
-    $settings = $c->get('settings')['logger'];
-    $logger = new Monolog\Logger($settings['name']);
-    $logger->pushProcessor(new Monolog\Processor\UidProcessor());
-    $logger->pushHandler(new Monolog\Handler\StreamHandler($settings['path'], $settings['level']));
-    return $logger;
 };
 
 // Doctrine DB
@@ -37,4 +30,18 @@ $container['db'] = function ($c) {
     $dbal = DoctrineManager::getConnection($connectionParams, $config);
     $dbal->setFetchMode(\PDO::FETCH_ASSOC);
     return $dbal;
+};
+
+// monolog
+$container['logger'] = function ($c) {
+    $settings = $c->get('settings')['logger'];
+    $logger = new Monolog\Logger($settings['name']);
+    $logger->pushProcessor(new Monolog\Processor\UidProcessor());
+    $logger->pushHandler(new Monolog\Handler\StreamHandler($settings['path'], $settings['level']));
+    return $logger;
+};
+
+// Customer Error Handler
+$container["errorHandler"] = function ($container) {
+    return new \Handlers\ApiError($container["logger"]);
 };
