@@ -15,5 +15,14 @@ return [
             'path' => isset($_ENV['docker']) ? 'php://stdout' : __DIR__ . '/../logs/app.log',
             'level' => \Monolog\Logger::DEBUG,
         ],
+        // Database settings
+        'db' => [
+            'DB_USER' => getenv('DB_USER') ?: 'root',
+            'DB_PASSWORD' => getenv('DB_PASSWORD') ?: '',
+            'DB_NAME' => getenv('DB_NAME') ?: '',
+            'DB_HOST' => getenv('DB_HOST') ?: 'localhost',
+            'DB_DRIVER' => getenv('DB_DRIVER') ?: 'pdo_sqlite',
+            'DB_PATH' => getenv('DB_PATH') ?: '',
+        ],
     ],
 ];
