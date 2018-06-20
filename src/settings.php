@@ -22,7 +22,7 @@ return [
             'DB_NAME' => getenv('DB_NAME') ?: '',
             'DB_HOST' => getenv('DB_HOST') ?: 'localhost',
             'DB_DRIVER' => getenv('DB_DRIVER') ?: 'pdo_sqlite',
-            'DB_PATH' => getenv('DB_PATH') ?: '',
+            'DB_PATH' => getenv('DB_PATH') ?: 'c:/Users/jerome/PhpstormProjects/Pourmiam/db/pourmiam.db',
         ],
         'email' => [
             'SMTP_SRV' => getenv('SMTP_SRV') ?: 'smtp.gmail.com',

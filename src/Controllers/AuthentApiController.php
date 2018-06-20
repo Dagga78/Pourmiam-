@@ -121,7 +121,7 @@ class AuthentApiController extends ApiController
 
         $token = bin2hex(openssl_random_pseudo_bytes(8));
         $this->storeConfirmToken($token, $user['id'], 'reset');
-        //$this->ci->notificationHandler->notifyReset($email, $token);
+        $this->ci->notificationHandler->notifyReset($email, $token);
         return $response;
     }
 

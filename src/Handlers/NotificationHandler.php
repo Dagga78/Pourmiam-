@@ -9,7 +9,8 @@
 namespace Handlers;
 
 use PHPMailer\PHPMailer\PHPMailer;
-
+use Interop\Container\ContainerInterface;
+use \Slim\Views\PhpRenderer;
 /**
  * NotificationHandler send notification by email to recipient
  *
@@ -21,15 +22,17 @@ class NotificationHandler
     protected $mail;
 
     protected $renderer;
+    protected $logger;
 
     protected $settings;
 
     protected $useMock = true;
 
-    public function __construct($settings, \Slim\Views\PhpRenderer $renderer)
+    public function __construct($settings, ContainerInterface $container)
     {
         $this->mail = new PHPMailer(true);
-        $this->renderer = $renderer;
+        $this->renderer = $container["renderer"];
+        $this->logger   = $container["logger"];
 
         $this->mail->isSMTP();
         $this->mail->Host = $settings['SMTP_SRV'];                // Specify main and backup SMTP servers
@@ -49,7 +52,7 @@ class NotificationHandler
                 ],
             ];
         }
-        $this->mail->setFrom('noreply.pourmiam@gmail.com', "PourMiam'");
+        $this->mail->setFrom('noreply.pourmiam@gmail.com', 'Pourmiam');
 
         $this->useMock = ($settings['SMTP_USE_MOCK'] == 'true') ? true : false;
 
@@ -62,7 +65,7 @@ class NotificationHandler
                          "authent/init/$token/confirm";
         $args = ["urlApiConfirm" => $urlApiConfirm];
         $mailTxt = $this->renderer->fetch('mail_for_init.ptxt', $args);
-        $this->notify($userMail, "Creation de compte PourMiam'", $mailTxt);
+        $this->notify($userMail, "Pourmiam Account Creation", $mailTxt);
     }
 
     /**
@@ -78,15 +81,26 @@ class NotificationHandler
         bool $isHTML = null
     ) {
         if (!$this->useMock) {
-            //Recipients
-            $this->mail->addAddress($userMail);
+            try {
+                //Recipients
+                $this->mail->addAddress($userMail);
 
-            //Content
-            $this->mail->isHTML($isHTML);                                  // Set email format to HTML
-            $this->mail->Subject = $subject;
-            $this->mail->Body = $mailText;
+                //Content
+                $this->mail->isHTML($isHTML);                                  // Set email format to HTML
+                $this->mail->Subject = $subject;
+                $this->mail->Body = $mailText;
 
-            $this->mail->send();
+                if ( $this->mail->send() ) {
+                    $this->logger->info("NotificationHandler notify  mail->send : ", [$userMail] );
+                }
+                else {
+                    $this->logger->error("NotificationHandler notify  mail Not send ( " . $this->mail->ErrorInfo . " )", [$userMail] );
+                }
+            } catch (phpmailerException $e) {
+                $this->logger->error("NotificationHandler notify phpmailerException = ", [$e->errorMessage()] );
+            } catch (Exception $e) {
+                $this->logger->error("NotificationHandler notify Exception = ", [$e->getMessage()] );
+            }
         }
     }
 
@@ -96,6 +110,6 @@ class NotificationHandler
                          "authent/reset/$token/confirm";
         $args = ["urlApiConfirm" => $urlApiConfirm];
         $mailTxt = $this->renderer->fetch('mail_for_reset.ptxt', $args);
-        $this->notify($userMail, "Reset du mot de passe de votre compte PourMiam'", $mailTxt);
+        $this->notify($userMail, "Pourmiam Account Reset", $mailTxt);
     }
 }
