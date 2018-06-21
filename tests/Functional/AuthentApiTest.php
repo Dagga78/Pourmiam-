@@ -122,7 +122,7 @@ class AuthentApiTest extends BaseTestCase
 
     public function testauthentResetconfirm()
     {
-        $response = $this->runApp('POST', '/authent/reset/RESETNOEXPI0123/confirm', ['password' => 'jjoo']);
+        $response = $this->runApp('POST', '/authent/reset/b74855e085e4e3b3/confirm', ['password' => 'jjoo']);
 
         $this->assertEquals(200, $response->getStatusCode());
     }

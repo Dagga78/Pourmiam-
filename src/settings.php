@@ -1,7 +1,24 @@
 <?php
+// loading env in settings might not be the best place.
+// the only other choice is in index.php.
+// settings.php is called during UniyTesting, index is not.
+try {
+    // dotenv now use exceptions instead of return codes
+    $dotenv = new Dotenv\Dotenv(__DIR__ . '/..');
+    $dotenv->load();
+} catch (Exception $e) {
+    // Logger not avaliable yet use php error
+    //error_log("No environment file, default values for everything (" . $e->getMessage() . ")\n");
+}
+
+
+//  N'affiche pas les erreurs en prod, sinon tout
+error_reporting(getenv('TARGET') == 'prod' ? 0 : E_ALL);
+
+
 return [
     'settings' => [
-        'displayErrorDetails' => true, // set to false in production
+        'displayErrorDetails' => (getenv('TARGET') == 'prod') ? false : true,
         'addContentLengthHeader' => false, // Allow the web server to send the content-length header
 
         // Renderer settings
