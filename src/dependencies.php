@@ -48,7 +48,7 @@ $container["errorHandler"] = function ($container) {
 
 // eMail Notifier
 $container['notificationHandler'] = function ($container) {
-    $settings = array_merge($container->get('settings')['email'], $container->get('settings')['Host']);
-    $notif = new Handlers\NotificationHandler($settings, $container);
+    $settings = $container->get('settings')['email'];
+    $notif = new Handlers\NotificationHandler($settings, $container["renderer"]);
     return $notif;
 };
