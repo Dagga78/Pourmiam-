@@ -6,7 +6,6 @@ use Slim\Http\Response;
 // Routes
 
 
-
 /**
  * AUTHENT Routes
  */
@@ -53,13 +52,24 @@ $app->group('/comentary', function () {
 
 })->add('TokenAuth');
 
-/**
- * GET restaurantFind
- * Summary: Recherche des restaurant par nom ou par ville
- * Notes: Recherche de restaurant dans la base Local avec le debut du nom ou la ville.  Specific business errors for current operation will be encapsulated in  HTTP Response 422 Unprocessable entity
- * Output-Formats: [application/json;charset=utf-8]
- */
-$app->GET('/restaurant','\Controllers\RestaurantApiController:restaurantFind')->add('TokenAuth');
+
+$app->group('/restaurant', function () {
+    /**
+     * GET restaurantFind
+     * Summary: Recherche des restaurant par nom ou par ville
+     * Notes: Recherche de restaurant dans la base Local avec le debut du nom ou la ville.  Specific business errors for current operation will be encapsulated in  HTTP Response 422 Unprocessable entity
+     * Output-Formats: [application/json;charset=utf-8]
+     */
+    $this->GET('', '\Controllers\RestaurantApiController:restaurantFind');
+
+    /**
+     * GET restaurantFind
+     * Summary: Recherche des restaurant par nom ou par ville
+     * Notes: Recherche de restaurant dans la base Local avec le debut du nom ou la ville.  Specific business errors for current operation will be encapsulated in  HTTP Response 422 Unprocessable entity
+     * Output-Formats: [application/json;charset=utf-8]
+     */
+    $this->GET('/[{id:[0-9]+}]', '\Controllers\RestaurantApiController:restaurantGet');
+});
 
 $app->get('/[{name}]', function (Request $request, Response $response, array $args) {
     // Sample log message

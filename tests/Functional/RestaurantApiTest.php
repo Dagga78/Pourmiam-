@@ -47,30 +47,51 @@ class RestaurantApiTest extends BaseTestCase
 
     public function testrestaurantFindByVile()
     {
-        $response = $this->runApp('GET', '/restaurant?city=Longnes', null, 'ABCDEF0123456789');
+        $response = $this->runApp('GET', '/restaurant?city=Longnes', null);
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-
-    // Test with no authent token
-    public function testrestaurantFindNoLogin()
-    {
-        $response = $this->runApp('GET', '/restaurant');
-        $this->assertEquals(401, $response->getStatusCode());
-    }
 
 
     // Test restaurantFind with no parameter
     public function testrestaurantFindNoParams()
     {
-        $response = $this->runApp('GET', '/restaurant', null, 'ABCDEF0123456789');
+        $response = $this->runApp('GET', '/restaurant', null);
         $this->assertEquals(400, $response->getStatusCode());
     }
 
     // Test restaurantFind with bad parameter
     public function testrestaurantFindBadParam()
     {
-        $response = $this->runApp('GET', '/restaurant?valle=34395533200022', null, 'ABCDEF0123456789');
+        $response = $this->runApp('GET', '/restaurant?valle=34395533200022', null);
+        $this->assertEquals(400, $response->getStatusCode());
+    }
+
+    public function testrestaurantGet()
+    {
+        $response = $this->runApp('GET', '/restaurant/1', null);
+
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+
+    public function testrestaurantGetBadArgs()
+    {
+        $response = $this->runApp('GET', '/restaurant/5', null);
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
+    public function testrestaurantGetBadRoute()
+    {
+        $response = $this->runApp('GET', '/restaurant/carotte', null);
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+
+    public function testrestaurantGetNoArgs()
+    {
+        $response = $this->runApp('GET', '/restaurant/', null);
+
         $this->assertEquals(400, $response->getStatusCode());
     }
 }
