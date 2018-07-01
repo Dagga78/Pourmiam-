@@ -44,8 +44,9 @@ class AuthentApiTest extends BaseTestCase
             'email' => 'jano@lapin.net',
             'password' => 'jano'
         ]);
-        $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('token', (string)$response->getBody());
+        $this->assertEquals(200, $response->getStatusCode());
+
     }
 
     public function testauthentLoginNoParams()
