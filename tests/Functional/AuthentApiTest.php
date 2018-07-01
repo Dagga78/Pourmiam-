@@ -88,7 +88,7 @@ class AuthentApiTest extends BaseTestCase
 
     public function testauthentReset()
     {
-        $response = $this->runApp('POST', '/authent/reset', ['email' => 'jeromejouet@laposte.net']);
+        $response = $this->runApp('POST', '/authent/reset', ['email' => 'jano@lapin.net']);
         $this->assertEquals(200, $response->getStatusCode());
     }
 
@@ -152,12 +152,11 @@ class AuthentApiTest extends BaseTestCase
     public function testauthentInit()
     {
         $response = $this->runApp('POST', '/authent/init', [
-            'firstname' => 'Luke',
+            'firstname' => 'Anakin',
             'lastname' => 'Skywalker',
-            'email' => 'luke@skywalker.net',
+            'email' => 'Anakin@skywalker.net',
             'password' => 'guest'
         ]);
-
         $this->assertEquals(200, $response->getStatusCode());
     }
 

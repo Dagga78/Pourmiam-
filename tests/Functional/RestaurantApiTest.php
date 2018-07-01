@@ -47,51 +47,87 @@ class RestaurantApiTest extends BaseTestCase
 
     public function testrestaurantFindByVile()
     {
-        $response = $this->runApp('GET', '/restaurant?city=Longnes', null);
+        $response = $this->runApp('GET', '/restaurant?city=Longnes');
         $this->assertEquals(200, $response->getStatusCode());
     }
-
-
-
     // Test restaurantFind with no parameter
     public function testrestaurantFindNoParams()
     {
         $response = $this->runApp('GET', '/restaurant', null);
         $this->assertEquals(400, $response->getStatusCode());
     }
-
     // Test restaurantFind with bad parameter
     public function testrestaurantFindBadParam()
     {
         $response = $this->runApp('GET', '/restaurant?valle=34395533200022', null);
         $this->assertEquals(400, $response->getStatusCode());
     }
-
     public function testrestaurantGet()
     {
         $response = $this->runApp('GET', '/restaurant/1', null);
-
         $this->assertEquals(200, $response->getStatusCode());
     }
-
     public function testrestaurantGetBadArgs()
     {
         $response = $this->runApp('GET', '/restaurant/5', null);
 
         $this->assertEquals(404, $response->getStatusCode());
     }
-
     public function testrestaurantGetBadRoute()
     {
         $response = $this->runApp('GET', '/restaurant/carotte', null);
 
         $this->assertEquals(404, $response->getStatusCode());
     }
-
     public function testrestaurantGetNoArgs()
     {
         $response = $this->runApp('GET', '/restaurant/', null);
 
         $this->assertEquals(400, $response->getStatusCode());
     }
+    public function testrestaurantUp()
+    {
+        $response = $this->runApp('GET', '/restaurant/positif/1',null);
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+    public function testrestaurantUpBadArgs()
+    {
+        $response = $this->runApp('GET', '/restaurant/positif/2', null);
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+    public function testrestaurantUpBadRoute()
+    {
+        $response = $this->runApp('GET', '/restaurant/positif/luidsd',null);
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+    public function testrestaurantUpNoArgs()
+    {
+        $response = $this->runApp('GET', '/restaurant/positif/', null);
+        $this->assertEquals(400, $response->getStatusCode());
+    }
+    public function testrestaurantDown()
+    {
+        $response = $this->runApp('GET', '/restaurant/negatif/1',null);
+        $this->assertEquals(200, $response->getStatusCode());
+    }
+    public function testrestaurantDownBadArgs()
+    {
+        $response = $this->runApp('GET', '/restaurant/negatif/2', null);
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+    public function testrestaurantDownBadRoute()
+    {
+        $response = $this->runApp('GET', '/restaurant/negatif/luidsd',null);
+
+        $this->assertEquals(404, $response->getStatusCode());
+    }
+    public function testrestaurantDownNoArgs()
+    {
+        $response = $this->runApp('GET', '/restaurant/negatif/', null);
+        $this->assertEquals(400, $response->getStatusCode());
+    }
+
 }
