@@ -56,6 +56,11 @@ class RestaurantApiTest extends BaseTestCase
         $response = $this->runApp('GET', '/restaurant', null);
         $this->assertEquals(400, $response->getStatusCode());
     }
+    public function testrestaurantFindNotFound()
+    {
+        $response = $this->runApp('GET', '/restaurant?city=Humm', null);
+        $this->assertEquals(404, $response->getStatusCode());
+    }
     // Test restaurantFind with bad parameter
     public function testrestaurantFindBadParam()
     {
