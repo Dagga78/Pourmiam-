@@ -52,7 +52,7 @@ class NotificationHandler
         $this->settings = $settings;
     }
 
-    protected function notify(string $userMail, string $subject, string $mailText, bool $isHTML = false)
+    protected function notify(string $userMail, string $subject, string $mailText, bool $isHTML = null)
     {
         if (!$this->useMock) {
             //Recipients
