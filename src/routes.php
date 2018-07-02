@@ -72,6 +72,17 @@ $app->group('/restaurant', function () {
     $this->GET('/negatif/[{id:[0-9]+}]', '\Controllers\RestaurantApiController:restaurantDown');
 });
 
+$app->group('/plats', function (){
+    /**
+     * Get PlatByRestaurant
+     */
+    $this->POST('','\Controllers\DishApiController:dishGetByRestaurant');
+
+});
+
+
+
+
 $app->get('/[{name}]', function (Request $request, Response $response, array $args) {
     // Sample log message
     $this->logger->info("Slim-Skeleton '/' route");
