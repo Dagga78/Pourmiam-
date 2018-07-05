@@ -59,7 +59,7 @@ $app->group('/restaurant', function () {
      */
     $this->GET('', '\Controllers\RestaurantApiController:restaurantFind');
     /**
-     * GET restaurantFind
+     * GET restaurantGet
      */
     $this->GET('/[{id:[0-9]+}]', '\Controllers\RestaurantApiController:restaurantGet');
     /**
