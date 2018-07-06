@@ -16,7 +16,10 @@ final class ApiError extends \Slim\Handlers\Error
         $this->logger = $logger;
     }
 
-    public function __invoke(Request $request, Response $response, \Exception $exception)
+    public function __invoke(
+        Request $request,
+        Response $response,
+        \Exception $exception)
     {
         $this->logStrategy($request, $exception);
 
