@@ -38,7 +38,24 @@ class RestaurantApiController extends ApiController
         } else {
             return $response->withJSON($data);
         }
+        if (empty($params['idRestaurant'])) {
+            throw new \Exceptions\MissingParameterException();
+        }
+        $budget = filter_var($params['idRestaurant'], FILTER_SANITIZE_STRING);
+        $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_budget ON Restaurant.idRestaurant = Restaurant_has_budget.idRestaurant where Restaurant_has_budget.idRestaurant = ?", [$budget]);
+        if (empty($data)) {
+            throw new \Exceptions\NotFoundException();
+        } else {
+            return $response->withJSON($data);
+        }
 
+        $type = filter_var($params['idRestaurant'], FILTER_SANITIZE_STRING);
+        $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_Type_cuisine ON Restaurant.idRestaurant = Restaurant_has_Type_cuisine.idRestaurant where Restaurant_has_Type_cuisine.idRestaurant = ?", [$type]);
+        if (empty($data)) {
+            throw new \Exceptions\NotFoundException();
+        } else {
+            return $response->withJSON($data);
+        }
 
     }
 
