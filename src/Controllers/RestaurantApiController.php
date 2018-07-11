@@ -45,6 +45,7 @@ class RestaurantApiController extends ApiController
         $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_budget ON Restaurant.idRestaurant = Restaurant_has_budget.idRestaurant where Restaurant_has_budget.idRestaurant = ?", [$budget]);
         if (empty($data)) {
             throw new \Exceptions\NotFoundException();
+            return "ok budget";
         } else {
             return $response->withJSON($data);
         }
