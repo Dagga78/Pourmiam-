@@ -40,7 +40,7 @@ class RestaurantApiController extends ApiController
         }
         if (empty($params['idBudget'])) {
             throw new \Exceptions\MissingParameterException();
-        }
+        } 
         $budget = filter_var($params['idBudget'], FILTER_SANITIZE_STRING);
         $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_budget ON Restaurant.idRestaurant = Restaurant_has_budget.idRestaurant where Restaurant_has_budget.idBudget = ?", [$budget]);
         if (empty($data)) {
