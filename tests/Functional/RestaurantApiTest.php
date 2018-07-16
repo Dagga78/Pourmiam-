@@ -50,13 +50,11 @@ class RestaurantApiTest extends BaseTestCase
         $response = $this->runApp('GET', '/restaurant?city=Longnes');
         $this->assertEquals(200, $response->getStatusCode());
     }
-
-
-
-
-
-
-
+   public function testrestaurantFindByVileAndBudget()
+    {
+        $response = $this->runApp('GET', '/restaurant?city=Longnes&idBudget=2');
+        $this->assertEquals(200, $response->getStatusCode());
+    }
     // Test restaurantFind with no parameter
     public function testrestaurantFindNoParams()
     {
@@ -78,6 +76,12 @@ class RestaurantApiTest extends BaseTestCase
     {
         $response = $this->runApp('GET', '/restaurant/1', null);
         $this->assertEquals(200, $response->getStatusCode());
+    }
+    public function testrestaurantGetBadArgs()
+    {
+        $response = $this->runApp('GET', '/restaurant/5', null);
+
+        $this->assertEquals(404, $response->getStatusCode());
     }
     public function testrestaurantGetNoArgs()
     {
@@ -112,7 +116,6 @@ class RestaurantApiTest extends BaseTestCase
 
         $this->assertEquals(404, $response->getStatusCode());
     }
-
     public function testrestaurantDownNoArgs()
     {
         $response = $this->runApp('GET', '/restaurant/negatif/', null);

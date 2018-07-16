@@ -154,7 +154,7 @@ class AuthentApiTest extends BaseTestCase
         $response = $this->runApp('POST', '/authent/init', [
             'firstname' => 'Anakin',
             'lastname' => 'Skywalker',
-            'email' => 'Anakin@skywalker.net',
+            'email' => 'borgromain@gmail.com',
             'password' => 'guest'
         ]);
         $this->assertEquals(200, $response->getStatusCode());
