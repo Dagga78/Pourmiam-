@@ -48,46 +48,17 @@ class UserApiTest extends BaseTestCase
 
     public function testusersGet()
     {
-        $response = $this->runApp('GET', '/user/', null, "ABCDEF0123456789");
-
-        $this->assertEquals(200, $response->getStatusCode());
+        $response = $this->runApp('GET', '/user', null, "0c9e9ccdfd0793cb");
         $this->assertContains('jano', (string)$response->getBody());
+        $this->assertEquals(200, $response->getStatusCode());
+
     }
 
     public function testusersGetUnknowsUsers()
     {
-        $response = $this->runApp('GET', '/user/');
+        $response = $this->runApp('GET', '/user');
 
         $this->assertEquals(401, $response->getStatusCode());
         $this->assertContains('Unauthorized  Missing or Invalid credentials', (string)$response->getBody());
     }
-
-
-    /**
-     * Test case for usersUpdate
-     *
-     * Modify information from my account.
-     *
-     */
-
-    public function testusersUpdate()
-    {
-        $response = $this->runApp('PUT', '/user/', [
-                "firstname" => "Tony",
-                "lastname" => "Stark",
-                "email" => "ironman@avengers.com",
-                "password" => "SHIELD",
-            ], "ABCDEF0123456789");
-
-        $this->assertEquals(200, $response->getStatusCode());
-    }
-
-    public function testusersUpdateUnknowUsers()
-    {
-        $response = $this->runApp('PUT', '/user/');
-
-        $this->assertEquals(401, $response->getStatusCode());
-        $this->assertContains('Unauthorized  Missing or Invalid credentials', (string)$response->getBody());
-    }
-
 }

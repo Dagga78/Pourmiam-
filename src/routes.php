@@ -55,11 +55,9 @@ $app->group('/comentary', function () {
 /**
  *  User Api
  */
-$app->group('/user/', function () {
+$app->group('/user', function () {
     //usersGet : Get information from my account.
     $this->get('', '\Controllers\UserApiController:usersGet');
-    //usersupdate : Modify information from my account
-    $this->PUT('', '\Controllers\UserApiController:usersUpdate');
 })->add('TokenAuth');
 
 $app->group('/restaurant', function () {
