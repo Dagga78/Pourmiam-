@@ -232,6 +232,8 @@ class AuthentApiController extends ApiController
      */
     protected function storeinit($firstname, $lastname, $email, $password, $token)
     {
+        $currentDateTime = new \Datetime("now", new \DateTimeZone('Europe/Paris'));
+        $currentDateTime->add(new \DateInterval('PT1H'));
 
         $insertValues = [
             "firstname" => $firstname,
@@ -241,10 +243,20 @@ class AuthentApiController extends ApiController
             "is_confirmed" => 0
         ];
 
-        return $this->db->insert('users', $insertValues);
+        $this->db->insert('users', $insertValues);
+        $userId = $this->db->fetchAssoc("SELECT id FROM users WHERE email = ?", [$email]);
+
+        $insertValues = [
+            "user_id" => $userId['id'],
+            "token" => $token,
+            "expiration" => $currentDateTime->format('Y-m-d H:i:s'),
+            "type_confirm" => 'init'
+        ];
+        $this->db->insert('confirm_tokens', $insertValues);
+
     }
 
-    /**
+    /**²²²²²²²²²²²²²²²²²²²²²
      * Changing a user with status: is_confirmed = FALSE to is_confirmed = TRUE
      * @param $request
      * @param $response

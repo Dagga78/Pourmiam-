@@ -38,41 +38,6 @@ namespace Tests\Functional;
 class RestaurantApiTest extends BaseTestCase
 {
 
-    /**
-     * Setup before running any test cases
-     */
-    public static function setUpBeforeClass()
-    {
-    }
-
-    /**
-     * Setup before running each test case
-     */
-    public function setUp()
-    {
-    }
-
-    /**
-     * Clean up after running each test case
-     */
-    public function tearDown()
-    {
-    }
-
-    /**
-     * Clean up after running all test cases
-     */
-    public static function tearDownAfterClass()
-    {
-    }
-
-    /**
-     * Test case for restaurantCreate
-     *
-     * Creation d'un restaurant..
-     *
-     */
-        
     public function testrestaurantCreate200()
     {
         $response = $this->runApp('POST', '//restaurant',[$restaurant => '',]);

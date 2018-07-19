@@ -52,6 +52,13 @@ $app->group('/comentary', function () {
 
 })->add('TokenAuth');
 
+/**
+ *  User Api
+ */
+$app->group('/user', function () {
+    //usersGet : Get information from my account.
+    $this->get('', '\Controllers\UserApiController:usersGet');
+})->add('TokenAuth');
 
 $app->group('/restaurant', function () {
     /**
@@ -72,15 +79,13 @@ $app->group('/restaurant', function () {
     $this->GET('/negatif/[{id:[0-9]+}]', '\Controllers\RestaurantApiController:restaurantDown');
 });
 
-$app->group('/plats', function (){
+$app->group('/plats', function () {
     /**
      * Get PlatByRestaurant
      */
-    $this->POST('','\Controllers\DishApiController:dishGetByRestaurant');
+    $this->POST('', '\Controllers\DishApiController:dishGetByRestaurant');
 
 });
-
-
 
 
 $app->get('/[{name}]', function (Request $request, Response $response, array $args) {
