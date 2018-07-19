@@ -28,32 +28,89 @@ class RestaurantApiController extends ApiController
     {
 
         $params = $request->getQueryParams();
+
+
         if (empty($params['city'])) {
-            throw new \Exceptions\MissingParameterException();
+
+            //Si pas de Ville on regarde si il y a un buget de cocher
+            if (empty($params['idBudget'])) {
+
+                //Si pas de buget coché on regarde si un type coché
+                if (empty($params['Type_cuisine.id'])) {
+
+                    //Aucune case n'est coché
+                }
+                else{
+                    //Seul le type est coché
+                    $type = filter_var($params['Type_cuisine.id'], FILTER_SANITIZE_STRING);
+                    $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_Type_cuisine ON Restaurant.idRestaurant = Restaurant_has_Type_cuisine.idRestaurant where Restaurant_has_Type_cuisine.idType_cuisine = ?", [$type]);
+                }
+            }
+            else
+            {
+
+                $budget = filter_var($params['idBudget'], FILTER_SANITIZE_STRING);
+                if (empty($params['Type_cuisine.id'])) {
+
+                    //Juste budget coché
+                    $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_budget ON Restaurant.idRestaurant = Restaurant_has_budget.idRestaurant where Restaurant_has_budget.idBudget = ?", [$budget]);
+                }
+                else{
+                    $type = filter_var($params['Type_cuisine.id'], FILTER_SANITIZE_STRING);
+                    // Budget + type coché
+                    $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_budget ON Restaurant.idRestaurant = Restaurant_has_budget.idRestaurant INNER JOIN Restaurant_has_Type_cuisine ON Restaurant.idRestaurant = Restaurant_has_Type_cuisine.idRestaurant where Restaurant_has_Type_cuisine.idType_cuisine = ?", [$type],"AND Restaurant_has_budget.idBudget = ?", [$budget]);
+                }
+
+            }
         }
-        $ville = filter_var($params['city'], FILTER_SANITIZE_STRING);
-        $data = $this->db->fetchAssoc("SELECT * FROM restaurant WHERE city = ?", [$ville]);
-        if (empty($data)) {
-            throw new \Exceptions\NotFoundException();
-        } else {
-            return $response->withJSON($data);
+        else{
+            // Ville coché
+            $ville = filter_var($params['city'], FILTER_SANITIZE_STRING);
+            if (empty($params['idBudget'])) {
+
+                if (empty($params['Type_cuisine.id'])) {
+
+                    //Juste ville coché
+                    $data = $this->db->fetchAssoc("SELECT * FROM restaurant WHERE city = ?", [$ville]);
+                }
+                else{
+                    $type = filter_var($params['Type_cuisine.id'], FILTER_SANITIZE_STRING);
+                    // Ville + type sans budget
+                    $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_Type_cuisine ON Restaurant.idRestaurant = Restaurant_has_Type_cuisine.idRestaurant where Restaurant_has_Type_cuisine.idType_cuisine = ?", [$type], "And Restaurant.city = ?",[$ville]);
+                }
+            }
+            else{
+                // budget coché
+                $budget = filter_var($params['idBudget'], FILTER_SANITIZE_STRING);
+                if (empty($params['Type_cuisine.id'])) {
+
+                    // budget + ville
+                    $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_budget ON Restaurant.idRestaurant = Restaurant_has_budget.idRestaurant where Restaurant_has_budget.idBudget = ?", [$budget], "And Restaurant.city = ?",[$ville]);
+
+                }
+                else{
+                    // Type coché
+                    $type = filter_var($params['Type_cuisine.id'], FILTER_SANITIZE_STRING);
+                    //budget + ville + type
+                    $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_budget ON Restaurant.idRestaurant = Restaurant_has_budget.idRestaurant  INNER JOIN Restaurant_has_Type_cuisine ON Restaurant.idRestaurant = Restaurant_has_Type_cuisine.idRestaurant where Restaurant_has_Type_cuisine.idType_cuisine = ?", [$type], "And Restaurant.city = ?",[$ville], "AND Restaurant_has_budget.idBudget = ?", [$budget]);
+					}
+            }
         }
-        if (empty($params['idBudget'])) {
-            throw new \Exceptions\MissingParameterException();
-        } 
-        $budget = filter_var($params['idBudget'], FILTER_SANITIZE_STRING);
-        $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_budget ON Restaurant.idRestaurant = Restaurant_has_budget.idRestaurant where Restaurant_has_budget.idBudget = ?", [$budget]);
+
         if (empty($data)) {
-            throw new \Exceptions\NotFoundException();
-            return "ok budget";
+
+
         } else {
             return $response->withJSON($data);
         }
 
-        $type = filter_var($params['idRestaurant'], FILTER_SANITIZE_STRING);
-        $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_Type_cuisine ON Restaurant.idRestaurant = Restaurant_has_Type_cuisine.idRestaurant where Restaurant_has_Type_cuisine.idRestaurant = ?", [$type]);
+        if (empty($params['Type_cuisine.id'])) {
+
+        }
+        $type = filter_var($params['Type_cuisine.id'], FILTER_SANITIZE_STRING);
+        $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_Type_cuisine ON Restaurant.idRestaurant = Restaurant_has_Type_cuisine.idRestaurant where Restaurant_has_Type_cuisine.idType_cuisine = ?",[$type]);
         if (empty($data)) {
-            throw new \Exceptions\NotFoundException();
+
         } else {
             return $response->withJSON($data);
         }
