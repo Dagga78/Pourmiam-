@@ -256,7 +256,7 @@ class AuthentApiController extends ApiController
 
     }
 
-    /**²²²²²²²²²²²²²²²²²²²²²
+    /**
      * Changing a user with status: is_confirmed = FALSE to is_confirmed = TRUE
      * @param $request
      * @param $response

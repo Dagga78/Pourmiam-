@@ -47,7 +47,8 @@ class RestaurantApiTest extends BaseTestCase
 
     public function testrestaurantFindByVile()
     {
-        $response = $this->runApp('GET', '/restaurant?city=Longnes');
+        $response = $this->runApp('GET', '/restaurant?city=78180');
+        $this->assertContains('token', (string)$response->getBody());
         $this->assertEquals(200, $response->getStatusCode());
     }
    public function testrestaurantFindByVileAndBudget()

@@ -32,7 +32,7 @@ class RestaurantApiController extends ApiController
             throw new \Exceptions\MissingParameterException();
         }
         $ville = filter_var($params['city'], FILTER_SANITIZE_STRING);
-        $data = $this->db->fetchAssoc("SELECT * FROM restaurant WHERE city = ?", [$ville]);
+        $data = $this->db->fetchAll("SELECT * FROM restaurant WHERE city = ?", [$ville]);
         if (empty($data)) {
             throw new \Exceptions\NotFoundException();
         } else {
