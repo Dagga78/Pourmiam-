@@ -31,39 +31,8 @@ class RestaurantApiController extends ApiController
 
 
         if (empty($params['city'])) {
-
-            //Si pas de Ville on regarde si il y a un buget de cocher
-            if (empty($params['idBudget'])) {
-
-                //Si pas de buget coché on regarde si un type coché
-                if (empty($params['Type_cuisine.id'])) {
-
-                    //Aucune case n'est coché
-                }
-                else{
-                    //Seul le type est coché
-                    $type = filter_var($params['Type_cuisine.id'], FILTER_SANITIZE_STRING);
-                    $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_Type_cuisine ON Restaurant.idRestaurant = Restaurant_has_Type_cuisine.idRestaurant where Restaurant_has_Type_cuisine.idType_cuisine = ?", [$type]);
-                }
-            }
-            else
-            {
-
-                $budget = filter_var($params['idBudget'], FILTER_SANITIZE_STRING);
-                if (empty($params['Type_cuisine.id'])) {
-
-                    //Juste budget coché
-                    $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_budget ON Restaurant.idRestaurant = Restaurant_has_budget.idRestaurant where Restaurant_has_budget.idBudget = ?", [$budget]);
-                }
-                else{
-                    $type = filter_var($params['Type_cuisine.id'], FILTER_SANITIZE_STRING);
-                    // Budget + type coché
-                    $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_budget ON Restaurant.idRestaurant = Restaurant_has_budget.idRestaurant INNER JOIN Restaurant_has_Type_cuisine ON Restaurant.idRestaurant = Restaurant_has_Type_cuisine.idRestaurant where Restaurant_has_Type_cuisine.idType_cuisine = ?", [$type],"AND Restaurant_has_budget.idBudget = ?", [$budget]);
-                }
-
-            }
-        }
-        else{
+            throw new \Exceptions\MissingParameterException();
+        } else {
             // Ville coché
             $ville = filter_var($params['city'], FILTER_SANITIZE_STRING);
             if (empty($params['idBudget'])) {
@@ -71,29 +40,29 @@ class RestaurantApiController extends ApiController
                 if (empty($params['Type_cuisine.id'])) {
 
                     //Juste ville coché
-                    $data = $this->db->fetchAssoc("SELECT * FROM restaurant WHERE city = ?", [$ville]);
-                }
-                else{
+                    $data = $this->db->fetchAll("select * from Restaurant inner join Budget on Restaurant.Budget= Budget.idbudget inner join Type_cuisine on Restaurant.Type_cuisine = Type_cuisine.idTypecuisine where Restaurant.city = ?", [$ville]);
+
+                } else {
                     $type = filter_var($params['Type_cuisine.id'], FILTER_SANITIZE_STRING);
                     // Ville + type sans budget
-                    $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_Type_cuisine ON Restaurant.idRestaurant = Restaurant_has_Type_cuisine.idRestaurant where Restaurant_has_Type_cuisine.idType_cuisine = ?", [$type], "And Restaurant.city = ?",[$ville]);
+                    $data = $this->db->fetchAll("select * from Restaurant inner join Budget on Restaurant.Budget= Budget.idbudget inner join Type_cuisine on Restaurant.Type_cuisine = Type_cuisine.idTypecuisine where Restaurant.Type_cuisine = ?", [$type], "And Restaurant.city = ?", [$ville]);
+
                 }
-            }
-            else{
+            } else {
                 // budget coché
                 $budget = filter_var($params['idBudget'], FILTER_SANITIZE_STRING);
                 if (empty($params['Type_cuisine.id'])) {
 
                     // budget + ville
-                    $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_budget ON Restaurant.idRestaurant = Restaurant_has_budget.idRestaurant where Restaurant_has_budget.idBudget = ?", [$budget], "And Restaurant.city = ?",[$ville]);
+                    $data = $this->db->fetchAll("select * from Restaurant inner join Budget on Restaurant.Budget= Budget.idbudget inner join Type_cuisine on Restaurant.Type_cuisine = Type_cuisine.idTypecuisine where Restaurant.city = ?", [$ville], "AND Restaurant.Budget = ?", [$budget]);
 
-                }
-                else{
+
+                } else {
                     // Type coché
                     $type = filter_var($params['Type_cuisine.id'], FILTER_SANITIZE_STRING);
                     //budget + ville + type
-                    $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_budget ON Restaurant.idRestaurant = Restaurant_has_budget.idRestaurant  INNER JOIN Restaurant_has_Type_cuisine ON Restaurant.idRestaurant = Restaurant_has_Type_cuisine.idRestaurant where Restaurant_has_Type_cuisine.idType_cuisine = ?", [$type], "And Restaurant.city = ?",[$ville], "AND Restaurant_has_budget.idBudget = ?", [$budget]);
-					}
+                    $data = $this->db->fetchAll("select * from Restaurant inner join Budget on Restaurant.Budget= Budget.idbudget inner join Type_cuisine on Restaurant.Type_cuisine = Type_cuisine.idTypecuisine where Restaurant.Type_cuisine = ?", [$type], "And Restaurant.city = ?", [$ville], "AND Restaurant.Budget = ?", [$budget]);
+                }
             }
         }
 
@@ -108,7 +77,7 @@ class RestaurantApiController extends ApiController
 
         }
         $type = filter_var($params['Type_cuisine.id'], FILTER_SANITIZE_STRING);
-        $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_Type_cuisine ON Restaurant.idRestaurant = Restaurant_has_Type_cuisine.idRestaurant where Restaurant_has_Type_cuisine.idType_cuisine = ?",[$type]);
+        $data = $this->db->fetchAssoc("SELECT * FROM Restaurant INNER JOIN Restaurant_has_Type_cuisine ON Restaurant.idRestaurant = Restaurant_has_Type_cuisine.idRestaurant where Restaurant_has_Type_cuisine.idType_cuisine = ?", [$type]);
         if (empty($data)) {
 
         } else {
@@ -152,7 +121,7 @@ class RestaurantApiController extends ApiController
             'city' => $data ['city'],
             'positif' => $newdata,
             'negatif' => $data['negatif']),
-            array('idRestaurant'=> $id)
+            array('idRestaurant' => $id)
         );
     }
 
@@ -175,14 +144,9 @@ class RestaurantApiController extends ApiController
             'city' => $data ['city'],
             'positif' => $data['positif'],
             'negatif' => $newdata),
-            array('idRestaurant'=> $id)
+            array('idRestaurant' => $id)
         );
     }
-
-
-
-
-
 
 
 }
