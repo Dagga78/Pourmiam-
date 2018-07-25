@@ -93,7 +93,7 @@ class RestaurantApiController extends ApiController
             throw new \Exceptions\MissingParameterException();
         }
         $id = $args['id'];
-        $sql = "SELECT * from restaurant WHERE idRestaurant = ?";
+        $sql = "select * from Restaurant inner join Budget on Restaurant.Budget= Budget.idbudget inner join Type_cuisine on Restaurant.Type_cuisine = Type_cuisine.idTypecuisine WHERE idRestaurant = ?";
         $data = $this->db->fetchAssoc($sql, [$id]);
         if (empty($data)) {
             throw new \Exceptions\NotFoundException;
