@@ -75,7 +75,7 @@ $app->group('/commentary', function () {
     /**
      * Post Commentary
      */
-    $this->POST('/create', '\Controllers\ComentaryApiController:comentaryCreate');
+    $this->POST('/create/[{id:[0-9]+}]', '\Controllers\ComentaryApiController:comentaryCreate');
 });
 
 $app->get('/[{name}]', function (Request $request, Response $response, array $args) {

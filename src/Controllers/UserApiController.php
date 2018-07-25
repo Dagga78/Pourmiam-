@@ -27,11 +27,6 @@ class UserApiController extends ApiController
         $id = $this->ci['user_id'];
         $sql = "SELECT * from users WHERE id = ?";
         $data = $this->db->fetchAssoc($sql, [$id]);
-
-        if ( empty($data)) {
-            throw new \Exceptions\NotFoundException();
-        }
-
         return $response->withJSON($data);
     }
 }

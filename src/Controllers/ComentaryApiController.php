@@ -13,26 +13,32 @@ namespace Controllers;
  *
  * @author patrick
  */
-class ComentaryApiController extends ApiController{
+class ComentaryApiController extends ApiController
+{
 
 
-/**
- * function comentaryCreate:
- * params :
- *  comentary: \\Models\Comentary
- * @author CodeGen
- */
-    public function comentaryCreate($request, $response, $args) {
+    /**
+     * function comentaryCreate:
+     * params :
+     *  comentary: \\Models\Comentary
+     * @author CodeGen
+     */
+    public function comentaryCreate($request, $response, $args)
+    {
 
         $body = $request->getParsedBody();
+
+        if (empty($args['id'])) {
+            throw new \Exceptions\MissingParameterException();
+        }
 
         if (empty($body['Commentaire'])) {
             throw new \Exceptions\MissingParameterException();
         }
         $comentary = $body['Commentaire'];
-        if (empty($body['Nom'])){
-           $username = "Anonyme";
-        }else{
+        if (empty($body['Nom'])) {
+            $username = "Anonyme";
+        } else {
             $username = $body['Nom'];
         }
         $insertValues = [
@@ -41,34 +47,36 @@ class ComentaryApiController extends ApiController{
 
         ];
         return $this->db->insert('Avis', $insertValues);
+        $id = $this->db->fetchAssoc("select idAvis from Avis");
+        
+        $insertValues = [
+            "idAvis" => $id,
+            "idRestaurant" => $args['id']
+        ];
+        return $this->db->insert('Restaurant_has_Avis', $insertValues);
 
 
-}
+    }
 
 
-/**
- * function comentaryFind:
- * params :
- *  idrestaurant: int
- * @author CodeGen
- */
-    public function comentaryFind($request, $response, $args) {
+    /**
+     * function comentaryFind:
+     * params :
+     *  idrestaurant: int
+     * @author CodeGen
+     */
+    public function comentaryFind($request, $response, $args)
+    {
 
-        $queryParams = $request->getQueryParams();
-        $idrestaurant = $queryParams['idrestaurant'];
-
-        if (empty($idrestaurant))
-        {
-           throw new \Exceptions\MissingParameterException();
+        if (empty($args['id'])) {
+            throw new \Exceptions\MissingParameterException();
         }
-        else
-        {
-            $response->$this->db->fetchAll("select * from Restaurant inner join Restaurant on Avis.Restaurant= Restaurant.idRestaurant  where Restaurant.idRestaurant = ?", $idrestaurant);
-            if (empty($response)) {
-                throw new \Exceptions\NotFoundException;
-            }
-            return $response->withJSON();
+
+        $Commentary = $this->db->fetchAll("select * from Avis inner join Restaurant_has_Avis on Avis.idAvis = Restaurant_has_Avis.idAvis  where Restaurant_has_Avis.idRestaurant = ?", [$args['id']]);
+        if (empty($Commentary)) {
+            throw new \Exceptions\NotFoundException;
         }
+        return $response->withJSON($Commentary);
 
 
     }

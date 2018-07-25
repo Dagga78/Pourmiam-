@@ -39,7 +39,7 @@ class ComentaryApiTest extends BaseTestCase
 {
     public function testCommentaryCreate()
     {
-        $response = $this->runApp('POST', '/commentary/create', [
+        $response = $this->runApp('POST', '/commentary/create/1', [
             'Commentaire' => 'TestCom',
             'Nom' => 'Borg'
         ]);
@@ -48,27 +48,36 @@ class ComentaryApiTest extends BaseTestCase
 
     public function testCommentaryCreateNoParams()
     {
-        $response = $this->runApp('POST', '/commentary/create');
+        $response = $this->runApp('POST', '/commentary/create/1');
 
         $this->assertEquals(400, $response->getStatusCode());
     }
 
     public function testCommentaryCreateNoName()
     {
-        $response = $this->runApp('POST', '/commentary/create', [
+        $response = $this->runApp('POST', '/commentary/create/1', [
             'Commentaire' => 'TestCom'
         ]);
 
         $this->assertEquals(200, $response->getStatusCode());
     }
 
-    public function testauthentLoginWrongParam()
+    public function testCommentaryCreateWrongParam()
     {
-        $response = $this->runApp('POST', '/commentary/create', [
+        $response = $this->runApp('POST', '/commentary/create/1', [
             'Commetaire' => 'TestCom',
             'Nom' => 'Borg'
         ]);
 
+        $this->assertEquals(400, $response->getStatusCode());
+    }
+
+    public function testCommentaryCreatenoRestaurant()
+    {
+        $response = $this->runApp('POST', '/commentary/create/', [
+            'Commentaire' => 'TestCom',
+            'Nom' => 'Borg'
+        ]);
         $this->assertEquals(400, $response->getStatusCode());
     }
 
@@ -78,41 +87,26 @@ class ComentaryApiTest extends BaseTestCase
      * find comentary.
      *
      */
-        
-    public function testcomentaryFind200()
-    {
-        $response = $this->runApp('GET', '//comentary');
 
+    public function testgetComment()
+    {
+        $response = $this->runApp('get', '/commentary/1');
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains('Success', (string)$response->getBody());
-    }
-    public function testcomentaryFind400()
-    {
-        $response = $this->runApp('GET', '//comentary');
 
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertContains('Bad Request  List of supported error codes: - 20: Invalid URL parameter value - 21: Missing body - 22: Invalid body - 23: Missing body field - 24: Invalid body field - 25: Missing header - 26: Invalid header value - 27: Missing query-string parameter - 28: Invalid query-string parameter value', (string)$response->getBody());
     }
-    public function testcomentaryFind401()
-    {
-        $response = $this->runApp('GET', '//comentary');
 
-        $this->assertEquals(401, $response->getStatusCode());
-        $this->assertContains('Unauthorized  List of supported error codes: - 40: Missing credentials - 41: Invalid credentials - 42: Expired credentials', (string)$response->getBody());
-    }
-    public function testcomentaryFind404()
+    public function testgetCommentBadArgs()
     {
-        $response = $this->runApp('GET', '//comentary');
-
+        $response = $this->runApp('get', '/commentary/987987956414894');
         $this->assertEquals(404, $response->getStatusCode());
-        $this->assertContains('Not Found  List of supported error codes: - 60: Resource not found', (string)$response->getBody());
-    }
-    public function testcomentaryFind422()
-    {
-        $response = $this->runApp('GET', '//comentary');
 
-        $this->assertEquals(422, $response->getStatusCode());
-        $this->assertContains('Unprocessable entity  Functional error', (string)$response->getBody());
+    }
+
+    public function testgetCommentNoArgs()
+    {
+        $response = $this->runApp('get', '/commentary/');
+        $this->assertEquals(400, $response->getStatusCode());
+
     }
 
 

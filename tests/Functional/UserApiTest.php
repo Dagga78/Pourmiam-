@@ -54,7 +54,7 @@ class UserApiTest extends BaseTestCase
 
     }
 
-    public function testusersGetUnknowsUsers()
+    public function testusersGetNoAuthent()
     {
         $response = $this->runApp('GET', '/user');
 
