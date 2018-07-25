@@ -26,13 +26,18 @@ class ComentaryApiController extends ApiController{
 
         $body = $request->getParsedBody();
         $comentary = $body['comentary'];
-        $id = $this->ci['user_id'];
+        $username = $body['username'];
         $insertValues = [
-            "Nom" => $id,
+            "Nom" => $username,
             "Commentaire" => $comentary,
-
         ];
+
         return $this->db->insert('Avis', $insertValues);
+
+        $insertValues = [
+            "idAvis" => $username,
+            "Commentaire" => $comentary,
+        ];
 
 
 }
@@ -55,7 +60,7 @@ class ComentaryApiController extends ApiController{
         }
         else
         {
-            $response->$this->db->fetchAll("select * from Restaurant inner join Restaurant on Avis.Restaurant= Restaurant.idRestaurant  where Restaurant.idRestaurant = ?", $idrestaurant);
+            $response->$this->db->fetchAll("select * from Avis inner join Restaurant_has_Avis on Avis.idAvis = Restaurant_has_Avis.idAvis  where Restaurant_has_Avis.idRestaurant = ?", $idrestaurant);
             if (empty($response)) {
                 throw new \Exceptions\NotFoundException;
             }

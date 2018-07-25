@@ -38,40 +38,52 @@ namespace Tests\Functional;
 class ComentaryApiTest extends BaseTestCase
 {
 
-    public function testcomentaryCreate200()
+    public function testCommentaryCreate()
     {
-        $response = $this->runApp('POST', '//comentary',[$comentary => '',]);
-
+        $response = $this->runApp('POST', '/authent/login', [
+            'email' => 'jano@lapin.net',
+            'password' => 'jano'
+        ]);
+        $this->assertContains('token', (string)$response->getBody());
         $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains('Success', (string)$response->getBody());
+
     }
-    public function testcomentaryCreate400()
+
+    public function testauthentLoginNoParams()
     {
-        $response = $this->runApp('POST', '//comentary',[$comentary => '',]);
+        $response = $this->runApp('POST', '/authent/login');
 
         $this->assertEquals(400, $response->getStatusCode());
-        $this->assertContains('Bad Request  List of supported error codes: - 20: Invalid URL parameter value - 21: Missing body - 22: Invalid body - 23: Missing body field - 24: Invalid body field - 25: Missing header - 26: Invalid header value - 27: Missing query-string parameter - 28: Invalid query-string parameter value', (string)$response->getBody());
     }
-    public function testcomentaryCreate401()
+
+    public function testauthentLoginWrongPwd()
     {
-        $response = $this->runApp('POST', '//comentary',[$comentary => '',]);
+        $response = $this->runApp('POST', '/authent/login', [
+            'email' => 'jano@lapin.net',
+            'password' => 'guest'
+        ]);
 
         $this->assertEquals(401, $response->getStatusCode());
-        $this->assertContains('Unauthorized  List of supported error codes: - 40: Missing credentials - 41: Invalid credentials - 42: Expired credentials', (string)$response->getBody());
     }
-    public function testcomentaryCreate404()
-    {
-        $response = $this->runApp('POST', '//comentary',[$comentary => '',]);
 
-        $this->assertEquals(404, $response->getStatusCode());
-        $this->assertContains('Not Found  List of supported error codes: - 60: Resource not found', (string)$response->getBody());
+    public function testauthentLoginWrongParam()
+    {
+        $response = $this->runApp('POST', '/authent/login', [
+            'emil' => 'jano@lapin.net',
+            'password' => 'guest'
+        ]);
+
+        $this->assertEquals(400, $response->getStatusCode());
     }
-    public function testcomentaryCreate422()
-    {
-        $response = $this->runApp('POST', '//comentary',[$comentary => '',]);
 
-        $this->assertEquals(422, $response->getStatusCode());
-        $this->assertContains('Unprocessable entity  Functional error', (string)$response->getBody());
+    public function testauthentLoginUnknownUser()
+    {
+        $response = $this->runApp('POST', '/authent/login', [
+            'email' => 'hacker@root-me.org',
+            'password' => 'guesswhat'
+        ]);
+
+        $this->assertEquals(401, $response->getStatusCode());
     }
 
     /**
