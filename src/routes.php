@@ -83,9 +83,23 @@ $app->group('/plats', function () {
     /**
      * Get PlatByRestaurant
      */
-    $this->get('/[{id:[0-9]+}]', '\Controllers\DishApiController:dishGetByRestaurant');
+    $this->GET('/[{id:[0-9]+}]', '\Controllers\DishApiController:dishGetByRestaurant');
 
 });
+
+$app->group('/commentary', function () {
+    /**
+     * Get commentaryByRestaurant
+     */
+    $this->GET('/[{id:[0-9]+}]', '\Controllers\ComentaryApiController:comentaryFind');
+
+    /**
+     * Post Commentary
+     */
+    $this->POST('/delete/[{id:[0-9]+}]', '\Controllers\ComentaryApiController:comentaryCreate ')->add('TokenAuth');
+});
+
+
 
 
 $app->get('/[{name}]', function (Request $request, Response $response, array $args) {
