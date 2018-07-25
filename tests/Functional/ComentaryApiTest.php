@@ -43,91 +43,34 @@ class ComentaryApiTest extends BaseTestCase
             'Commentaire' => 'TestCom',
             'Nom' => 'Borg'
         ]);
-        $this->assertContains('token', (string)$response->getBody());
         $this->assertEquals(200, $response->getStatusCode());
-
     }
 
-    public function testauthentLoginNoParams()
+    public function testCommentaryCreateNoParams()
     {
-        $response = $this->runApp('POST', '/authent/login');
+        $response = $this->runApp('POST', '/commentary/create');
 
         $this->assertEquals(400, $response->getStatusCode());
     }
 
-    public function testauthentLoginWrongPwd()
+    public function testCommentaryCreateNoName()
     {
-        $response = $this->runApp('POST', '/authent/login', [
-            'email' => 'jano@lapin.net',
-            'password' => 'guest'
+        $response = $this->runApp('POST', '/commentary/create', [
+            'Commentaire' => 'TestCom'
         ]);
 
-        $this->assertEquals(401, $response->getStatusCode());
+        $this->assertEquals(200, $response->getStatusCode());
     }
 
     public function testauthentLoginWrongParam()
     {
-        $response = $this->runApp('POST', '/authent/login', [
-            'emil' => 'jano@lapin.net',
-            'password' => 'guest'
+        $response = $this->runApp('POST', '/commentary/create', [
+            'Commetaire' => 'TestCom',
+            'Nom' => 'Borg'
         ]);
 
         $this->assertEquals(400, $response->getStatusCode());
     }
-
-    public function testauthentLoginUnknownUser()
-    {
-        $response = $this->runApp('POST', '/authent/login', [
-            'email' => 'hacker@root-me.org',
-            'password' => 'guesswhat'
-        ]);
-
-        $this->assertEquals(401, $response->getStatusCode());
-    }
-
-    public function testcomentaryCreate200()
-    {
-        $response = $this->runApp('POST', '//comentary',[$comentary => '',]);
-
-        $this->assertEquals(200, $response->getStatusCode());
-        $this->assertContains('Success', (string)$response->getBody());
-    }
-    public function testcomentaryCreate400()
-    {
-        $response = $this->runApp('POST', '//comentary',[$comentary => '',]);
-
-        $this->assertEquals(400, $response->getStatusCode());
-        $this->assertContains('Bad Request  List of supported error codes: - 20: Invalid URL parameter value - 21: Missing body - 22: Invalid body - 23: Missing body field - 24: Invalid body field - 25: Missing header - 26: Invalid header value - 27: Missing query-string parameter - 28: Invalid query-string parameter value', (string)$response->getBody());
-    }
-    public function testcomentaryCreate401()
-    {
-        $response = $this->runApp('POST', '//comentary',[$comentary => '',]);
-
-        $this->assertEquals(401, $response->getStatusCode());
-        $this->assertContains('Unauthorized  List of supported error codes: - 40: Missing credentials - 41: Invalid credentials - 42: Expired credentials', (string)$response->getBody());
-    }
-    public function testcomentaryCreate404()
-    {
-        $response = $this->runApp('POST', '//comentary',[$comentary => '',]);
-
-        $this->assertEquals(404, $response->getStatusCode());
-        $this->assertContains('Not Found  List of supported error codes: - 60: Resource not found', (string)$response->getBody());
-    }
-    public function testcomentaryCreate422()
-    {
-        $response = $this->runApp('POST', '//comentary',[$comentary => '',]);
-
-        $this->assertEquals(422, $response->getStatusCode());
-        $this->assertContains('Unprocessable entity  Functional error', (string)$response->getBody());
-    }
-
-    /**
-     * Test case for comentaryDelete
-     *
-     * delete a comentary.
-     *
-     */
-        
 
     /**
      * Test case for comentaryFind

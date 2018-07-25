@@ -25,8 +25,16 @@ class ComentaryApiController extends ApiController{
     public function comentaryCreate($request, $response, $args) {
 
         $body = $request->getParsedBody();
+
+        if (empty($body['Commentaire'])) {
+            throw new \Exceptions\MissingParameterException();
+        }
         $comentary = $body['Commentaire'];
-        $username = $body['Nom'];
+        if (empty($body['Nom'])){
+           $username = "Anonyme";
+        }else{
+            $username = $body['Nom'];
+        }
         $insertValues = [
             "Nom" => $username,
             "Commentaire" => $comentary,
