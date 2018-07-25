@@ -6,7 +6,7 @@
  * 
  */
 
-namespace \Controllers;
+namespace Controllers;
 
 /**
  * Description of ComentaryApiController
@@ -25,10 +25,10 @@ class ComentaryApiController extends ApiController{
     public function comentaryCreate($request, $response, $args) {
 
         $body = $request->getParsedBody();
-        $comentary = $body['comentary'];
-        $id = $this->ci['user_id'];
+        $comentary = $body['Commentaire'];
+        $username = $body['Nom'];
         $insertValues = [
-            "Nom" => $id,
+            "Nom" => $username,
             "Commentaire" => $comentary,
 
         ];

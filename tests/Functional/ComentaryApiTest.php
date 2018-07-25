@@ -37,6 +37,53 @@ namespace Tests\Functional;
  */
 class ComentaryApiTest extends BaseTestCase
 {
+    public function testCommentaryCreate()
+    {
+        $response = $this->runApp('POST', '/commentary/create', [
+            'Commentaire' => 'TestCom',
+            'Nom' => 'Borg'
+        ]);
+        $this->assertContains('token', (string)$response->getBody());
+        $this->assertEquals(200, $response->getStatusCode());
+
+    }
+
+    public function testauthentLoginNoParams()
+    {
+        $response = $this->runApp('POST', '/authent/login');
+
+        $this->assertEquals(400, $response->getStatusCode());
+    }
+
+    public function testauthentLoginWrongPwd()
+    {
+        $response = $this->runApp('POST', '/authent/login', [
+            'email' => 'jano@lapin.net',
+            'password' => 'guest'
+        ]);
+
+        $this->assertEquals(401, $response->getStatusCode());
+    }
+
+    public function testauthentLoginWrongParam()
+    {
+        $response = $this->runApp('POST', '/authent/login', [
+            'emil' => 'jano@lapin.net',
+            'password' => 'guest'
+        ]);
+
+        $this->assertEquals(400, $response->getStatusCode());
+    }
+
+    public function testauthentLoginUnknownUser()
+    {
+        $response = $this->runApp('POST', '/authent/login', [
+            'email' => 'hacker@root-me.org',
+            'password' => 'guesswhat'
+        ]);
+
+        $this->assertEquals(401, $response->getStatusCode());
+    }
 
     public function testcomentaryCreate200()
     {

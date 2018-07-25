@@ -31,27 +31,6 @@ $app->group('/authent', function () {
      */
     $this->POST('/init/{init_Token}/confirm', '\Controllers\AuthentApiController:authentinitConfirm');
 });
-
-$app->group('/comentary', function () {
-    /**
-     * comentaryCreate: create a commentary
-     */
-    $this->POST('', '\Controllers\ComentaryApiController:comentaryCreate');
-    /**
-     * comentaryDelete: delete a comentary
-     */
-    $this->DELETE('/{comentaryId}', '\Controllers\ComentaryApiController:comentaryDelete');
-    /**
-     * comentaryFind: find comentary
-     */
-    $this->GET('', '\Controllers\ComentaryApiController:comentaryFind');
-    /**
-     * comentaryUpdate: Update a comentary
-     */
-    $this->PUT('/{comentaryId}', '\Controllers\ComentaryApiController:comentaryUpdate');
-
-})->add('TokenAuth');
-
 /**
  *  User Api
  */
@@ -96,11 +75,8 @@ $app->group('/commentary', function () {
     /**
      * Post Commentary
      */
-    $this->POST('/delete/[{id:[0-9]+}]', '\Controllers\ComentaryApiController:comentaryCreate ')->add('TokenAuth');
+    $this->POST('/create', '\Controllers\ComentaryApiController:comentaryCreate');
 });
-
-
-
 
 $app->get('/[{name}]', function (Request $request, Response $response, array $args) {
     // Sample log message
