@@ -31,7 +31,6 @@ $app->group('/authent', function () {
      */
     $this->POST('/init/{init_Token}/confirm', '\Controllers\AuthentApiController:authentinitConfirm');
 });
-
 /**
  *  User Api
  */
@@ -78,9 +77,6 @@ $app->group('/commentary', function () {
      */
     $this->POST('/create/[{id:[0-9]+}]', '\Controllers\ComentaryApiController:comentaryCreate');
 });
-
-
-
 
 $app->get('/[{name}]', function (Request $request, Response $response, array $args) {
     // Sample log message
