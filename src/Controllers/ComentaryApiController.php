@@ -24,10 +24,6 @@ class ComentaryApiController extends ApiController{
  */
     public function comentaryCreate($request, $response, $args) {
 
-        $body = $request->getParsedBody();
-        $comentary = $body['comentary'];
-        $response->write('How about implementing comentaryCreate as a POST method ?');
-        return $response->withJSON();
 
     }
 
