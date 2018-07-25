@@ -59,11 +59,19 @@ class ComentaryApiController extends ApiController{
         $queryParams = $request->getQueryParams();
         $idrestaurant = $queryParams['idrestaurant'];
 
-        $response->$this->db->fetchAll("select * from Restaurant inner join Restaurant on Avis.Restaurant= Restaurant.idRestaurant  where Restaurant.idRestaurant = ?", $idrestaurant);
-        if (empty($response)) {
-            throw new \Exceptions\NotFoundException;
+        if (empty($idrestaurant))
+        {
+           throw new \Exceptions\MissingParameterException();
         }
-        return $response->withJSON();
+        else
+        {
+            $response->$this->db->fetchAll("select * from Restaurant inner join Restaurant on Avis.Restaurant= Restaurant.idRestaurant  where Restaurant.idRestaurant = ?", $idrestaurant);
+            if (empty($response)) {
+                throw new \Exceptions\NotFoundException;
+            }
+            return $response->withJSON();
+        }
+
 
     }
 
