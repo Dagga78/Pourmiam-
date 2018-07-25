@@ -15,7 +15,6 @@ $app->get('/version',  function ($request, $response, $args) {
 
 
 
-
 /**
  * POST authentInit
  * Summary: Create a temporary account.

@@ -1,0 +1,9 @@
+Cher client, chère cliente,
+
+
+Vous avez demandé la modification du mot de passe de votre compte PourMiam'.
+
+Suivez le lien ci-après pour créer un nouveau mot de passe : http://localhost:4200/forgotpassword/<?php echo $token; ?>/confirm
+
+Merci de votre confiance, 
+À bientôt. 

@@ -1,0 +1,9 @@
+Bienvenue chez PourMiam,
+
+
+Vous avez demandé la creation d'un compte PourMiam'.
+
+Suivez le lien ci-après pour finaliser cette creation : http://localhost:4200/inscription/<?php echo $token; ?>/confirm
+
+Merci de votre confiance, 
+À bientôt. 

@@ -45,3 +45,10 @@ $container['logger'] = function ($c) {
 $container["errorHandler"] = function ($container) {
     return new \Handlers\ApiError($container["logger"]);
 };
+
+// eMail Notifier
+$container['notificationHandler'] = function ($container) {
+    $settings = $container->get('settings')['email'];
+    $notif = new Handlers\NotificationHandler($settings, $container["renderer"]);
+    return $notif;
+};

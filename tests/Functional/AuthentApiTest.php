@@ -44,8 +44,9 @@ class AuthentApiTest extends BaseTestCase
             'email' => 'jano@lapin.net',
             'password' => 'jano'
         ]);
-        $this->assertEquals(200, $response->getStatusCode());
         $this->assertContains('token', (string)$response->getBody());
+        $this->assertEquals(200, $response->getStatusCode());
+
     }
 
     public function testauthentLoginNoParams()
@@ -88,7 +89,6 @@ class AuthentApiTest extends BaseTestCase
     public function testauthentReset()
     {
         $response = $this->runApp('POST', '/authent/reset', ['email' => 'jano@lapin.net']);
-
         $this->assertEquals(200, $response->getStatusCode());
     }
 
@@ -122,7 +122,7 @@ class AuthentApiTest extends BaseTestCase
 
     public function testauthentResetconfirm()
     {
-        $response = $this->runApp('POST', '/authent/reset/RESETNOEXPI0123/confirm', ['password' => 'jjoo']);
+        $response = $this->runApp('POST', '/authent/reset/b74855e085e4e3b3/confirm', ['password' => 'jjoo']);
 
         $this->assertEquals(200, $response->getStatusCode());
     }
@@ -152,12 +152,11 @@ class AuthentApiTest extends BaseTestCase
     public function testauthentInit()
     {
         $response = $this->runApp('POST', '/authent/init', [
-            'firstname' => 'Luke',
+            'firstname' => 'Anakin',
             'lastname' => 'Skywalker',
-            'email' => 'luke@skywalker.net',
+            'email' => 'luke@gmail.com',
             'password' => 'guest'
         ]);
-
         $this->assertEquals(200, $response->getStatusCode());
     }
 
