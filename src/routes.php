@@ -83,7 +83,7 @@ $app->group('/plats', function () {
     /**
      * Get PlatByRestaurant
      */
-    $this->POST('', '\Controllers\DishApiController:dishGetByRestaurant');
+    $this->get('/[{id:[0-9]+}]', '\Controllers\DishApiController:dishGetByRestaurant');
 
 });
 

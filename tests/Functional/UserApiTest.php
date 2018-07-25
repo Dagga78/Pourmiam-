@@ -59,6 +59,5 @@ class UserApiTest extends BaseTestCase
         $response = $this->runApp('GET', '/user');
 
         $this->assertEquals(401, $response->getStatusCode());
-        $this->assertContains('Unauthorized  Missing or Invalid credentials', (string)$response->getBody());
     }
 }

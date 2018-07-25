@@ -26,15 +26,14 @@ class DishApiController extends ApiController
     public function dishGetByRestaurant($request, $response, $args)
     {
 
-        $input = $request->getParsedBody();
-
-        if (empty($input['id'])) {
+        if (empty($args['id'])) {
             throw new \Exceptions\MissingParameterException();
         }
-        $id = filter_var($input['id'], FILTER_SANITIZE_STRING);
-        $Plats = $this->db->fetchAssoc("SELECT * FROM Plats INNER JOIN Restaurant_has_plats ON Plats.id = Restaurant_has_plats.idPlats where Restaurant_has_plats.idRestaurant = ?", [$id]);
 
-        if (!isset($Plats)) {
+        $id = ($args['id']);
+        $Plats = $this->db->fetchAll("SELECT * FROM Plats INNER JOIN Restaurant_has_plats ON Plats.id = Restaurant_has_plats.idPlats where Restaurant_has_plats.idRestaurant = ?", [$id]);
+
+        if (empty($Plats)) {
             throw new \Exceptions\NotFoundException();
         }
         return $response->withJSON($Plats);
