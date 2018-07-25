@@ -26,7 +26,11 @@ class ComentaryApiController extends ApiController{
 
         $body = $request->getParsedBody();
         $comentary = $body['comentary'];
-        $response->write('How about implementing comentaryCreate as a POST method ?');
+        $id = $this->ci['user_id'];
+        $response->$this->db->fetchAll("Insert into Avis (Commentaire, idUser) values ($comentary, $id)");
+        if (empty($response)) {
+            throw new \Exceptions\NotFoundException;
+        }
         return $response->withJSON();
 
     }
@@ -36,13 +40,14 @@ class ComentaryApiController extends ApiController{
  * params :
  *  comentaryId: string
  * @author CodeGen
- */
+
     public function comentaryDelete($request, $response, $args) {
 
         $response->write('How about implementing comentaryDelete as a DELETE method ?');
         return $response->withJSON();
 
     }
+ */
 
 /**
  * function comentaryFind:
@@ -54,7 +59,10 @@ class ComentaryApiController extends ApiController{
         $queryParams = $request->getQueryParams();
         $idrestaurant = $queryParams['idrestaurant'];
 
-        $response->write('How about implementing comentaryFind as a GET method ?');
+        $response->$this->db->fetchAll("select * from Restaurant inner join Restaurant on Avis.Restaurant= Restaurant.idRestaurant  where Restaurant.idRestaurant = ?", $idrestaurant);
+        if (empty($response)) {
+            throw new \Exceptions\NotFoundException;
+        }
         return $response->withJSON();
 
     }
@@ -65,7 +73,7 @@ class ComentaryApiController extends ApiController{
  *  comentaryId: string
  *  comentary: \\Models\Comentary
  * @author CodeGen
- */
+
     public function comentaryUpdate($request, $response, $args) {
 
         $body = $request->getParsedBody();
@@ -74,6 +82,6 @@ class ComentaryApiController extends ApiController{
         return $response->withJSON();
 
     }
-
+ */
 # end of operations block
 }
