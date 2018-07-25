@@ -27,13 +27,15 @@ class ComentaryApiController extends ApiController{
         $body = $request->getParsedBody();
         $comentary = $body['comentary'];
         $id = $this->ci['user_id'];
-        $response->$this->db->fetchAll("Insert into Avis (Commentaire, idUser) values ($comentary, $id)");
-        if (empty($response)) {
-            throw new \Exceptions\NotFoundException;
-        }
-        return $response->withJSON();
+        $insertValues = [
+            "Nom" => $id,
+            "Commentaire" => $comentary,
 
-    }
+        ];
+        return $this->db->insert('Avis', $insertValues);
+
+
+}
 
 
 /**
