@@ -48,7 +48,7 @@ class UserApiTest extends BaseTestCase
 
     public function testusersGet()
     {
-        $response = $this->runApp('GET', '/user', null, "0c9e9ccdfd0793cb");
+        $response = $this->runApp('GET', '/user', null, "ABCDEF0123456789");
         $this->assertContains('jano', (string)$response->getBody());
         $this->assertEquals(200, $response->getStatusCode());
 
