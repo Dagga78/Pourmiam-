@@ -67,8 +67,7 @@ class RestaurantApiController extends ApiController
         }
 
         if (empty($data)) {
-
-
+            throw new \Exceptions\NotFoundException();
         } else {
             return $response->withJSON($data);
         }
