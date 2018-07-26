@@ -6,74 +6,78 @@
  * 
  */
 
-namespace \Controllers;
+namespace Controllers;
 
 /**
  * Description of ComentaryApiController
  *
  * @author patrick
  */
-class ComentaryApiController extends ApiController{
+class ComentaryApiController extends ApiController
+{
 
 
-/**
- * function comentaryCreate:
- * params :
- *  comentary: \\Models\Comentary
- * @author CodeGen
- */
-    public function comentaryCreate($request, $response, $args) {
-
-        $body = $request->getParsedBody();
-        $comentary = $body['comentary'];
-        $response->write('How about implementing comentaryCreate as a POST method ?');
-        return $response->withJSON();
-
-    }
-
-/**
- * function comentaryDelete:
- * params :
- *  comentaryId: string
- * @author CodeGen
- */
-    public function comentaryDelete($request, $response, $args) {
-
-        $response->write('How about implementing comentaryDelete as a DELETE method ?');
-        return $response->withJSON();
-
-    }
-
-/**
- * function comentaryFind:
- * params :
- *  idrestaurant: int
- * @author CodeGen
- */
-    public function comentaryFind($request, $response, $args) {
-        $queryParams = $request->getQueryParams();
-        $idrestaurant = $queryParams['idrestaurant'];
-
-        $response->write('How about implementing comentaryFind as a GET method ?');
-        return $response->withJSON();
-
-    }
-
-/**
- * function comentaryUpdate:
- * params :
- *  comentaryId: string
- *  comentary: \\Models\Comentary
- * @author CodeGen
- */
-    public function comentaryUpdate($request, $response, $args) {
+    /**
+     * function comentaryCreate:
+     * params :
+     *  comentary: \\Models\Comentary
+     * @author CodeGen
+     */
+    public function comentaryCreate($request, $response, $args)
+    {
 
         $body = $request->getParsedBody();
-        $comentary = $body['comentary'];
-        $response->write('How about implementing comentaryUpdate as a PUT method ?');
-        return $response->withJSON();
+
+        if (empty($args['id'])) {
+            throw new \Exceptions\MissingParameterException();
+        }
+
+        if (empty($body['Commentaire'])) {
+            throw new \Exceptions\MissingParameterException();
+        }
+        $comentary = $body['Commentaire'];
+        if (empty($body['Nom'])) {
+            $username = "Anonyme";
+        } else {
+            $username = $body['Nom'];
+        }
+        $insertValues = [
+            "Nom" => $username,
+            "Commentaire" => $comentary,
+
+        ];
+        return $this->db->insert('Avis', $insertValues);
+        $id = $this->db->fetchAssoc("select idAvis from Avis");
+        
+        $insertValues = [
+            "idAvis" => $id,
+            "idRestaurant" => $args['id']
+        ];
+        return $this->db->insert('Restaurant_has_Avis', $insertValues);
+
 
     }
 
-# end of operations block
+
+    /**
+     * function comentaryFind:
+     * params :
+     *  idrestaurant: int
+     * @author CodeGen
+     */
+    public function comentaryFind($request, $response, $args)
+    {
+
+        if (empty($args['id'])) {
+            throw new \Exceptions\MissingParameterException();
+        }
+
+        $Commentary = $this->db->fetchAll("select * from Avis inner join Restaurant_has_Avis on Avis.idAvis = Restaurant_has_Avis.idAvis  where Restaurant_has_Avis.idRestaurant = ?", [$args['id']]);
+        if (empty($Commentary)) {
+            throw new \Exceptions\NotFoundException;
+        }
+        return $response->withJSON($Commentary);
+
+
+    }
 }

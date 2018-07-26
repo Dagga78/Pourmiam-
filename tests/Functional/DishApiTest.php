@@ -38,10 +38,24 @@ namespace Tests\Functional;
 class DishApiTest extends BaseTestCase
 {
 
-    public function testdishCreate200()
+    public function testgetdish()
     {
-        $response = $this->runApp('POST', '/plats',['id' => '1',]);
+        $response = $this->runApp('get', '/plats/1');
         $this->assertEquals(200, $response->getStatusCode());
+
+    }
+
+    public function testgetdishBadArgs()
+    {
+        $response = $this->runApp('get', '/plats/987987956414894');
+        $this->assertEquals(404, $response->getStatusCode());
+
+    }
+
+    public function testgetdishNoArgs()
+    {
+        $response = $this->runApp('get', '/plats/');
+        $this->assertEquals(400, $response->getStatusCode());
 
     }
 }

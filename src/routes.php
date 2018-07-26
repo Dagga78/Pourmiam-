@@ -31,27 +31,6 @@ $app->group('/authent', function () {
      */
     $this->POST('/init/{init_Token}/confirm', '\Controllers\AuthentApiController:authentinitConfirm');
 });
-
-$app->group('/comentary', function () {
-    /**
-     * comentaryCreate: create a commentary
-     */
-    $this->POST('', '\Controllers\ComentaryApiController:comentaryCreate');
-    /**
-     * comentaryDelete: delete a comentary
-     */
-    $this->DELETE('/{comentaryId}', '\Controllers\ComentaryApiController:comentaryDelete');
-    /**
-     * comentaryFind: find comentary
-     */
-    $this->GET('', '\Controllers\ComentaryApiController:comentaryFind');
-    /**
-     * comentaryUpdate: Update a comentary
-     */
-    $this->PUT('/{comentaryId}', '\Controllers\ComentaryApiController:comentaryUpdate');
-
-})->add('TokenAuth');
-
 /**
  *  User Api
  */
@@ -83,10 +62,21 @@ $app->group('/plats', function () {
     /**
      * Get PlatByRestaurant
      */
-    $this->POST('', '\Controllers\DishApiController:dishGetByRestaurant');
+    $this->GET('/[{id:[0-9]+}]', '\Controllers\DishApiController:dishGetByRestaurant');
 
 });
 
+$app->group('/commentary', function () {
+    /**
+     * Get commentaryByRestaurant
+     */
+    $this->GET('/[{id:[0-9]+}]', '\Controllers\ComentaryApiController:comentaryFind');
+
+    /**
+     * Post Commentary
+     */
+    $this->POST('/create/[{id:[0-9]+}]', '\Controllers\ComentaryApiController:comentaryCreate');
+});
 
 $app->get('/[{name}]', function (Request $request, Response $response, array $args) {
     // Sample log message

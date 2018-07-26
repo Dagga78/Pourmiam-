@@ -24,15 +24,9 @@ class UserApiController extends ApiController
      */
     public function usersGet($request, $response, $args)
     {
-        $logger = $this->ci->logger;
         $id = $this->ci['user_id'];
         $sql = "SELECT * from users WHERE id = ?";
         $data = $this->db->fetchAssoc($sql, [$id]);
-
-        if ( empty($data)) {
-            throw new \Exceptions\ServerErrorException;
-        }
-
         return $response->withJSON($data);
     }
 }

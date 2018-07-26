@@ -48,17 +48,16 @@ class UserApiTest extends BaseTestCase
 
     public function testusersGet()
     {
-        $response = $this->runApp('GET', '/user', null, "0c9e9ccdfd0793cb");
+        $response = $this->runApp('GET', '/user', null, "ABCDEF0123456789");
         $this->assertContains('jano', (string)$response->getBody());
         $this->assertEquals(200, $response->getStatusCode());
 
     }
 
-    public function testusersGetUnknowsUsers()
+    public function testusersGetNoAuthent()
     {
         $response = $this->runApp('GET', '/user');
 
         $this->assertEquals(401, $response->getStatusCode());
-        $this->assertContains('Unauthorized  Missing or Invalid credentials', (string)$response->getBody());
     }
 }
