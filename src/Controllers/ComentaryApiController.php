@@ -36,19 +36,17 @@ class ComentaryApiController extends ApiController
             throw new \Exceptions\MissingParameterException();
         }
         $comentary = $body['Commentaire'];
-        if (empty($body['Nom'])) {
-            $username = "Anonyme";
-        } else {
-            $username = $body['Nom'];
-        }
+        $username = $body['Nom'];
+
         $insertValues = [
             "Nom" => $username,
             "Commentaire" => $comentary,
 
         ];
-        return $this->db->insert('Avis', $insertValues);
-        $id = $this->db->fetchAssoc("select idAvis from Avis");
-        
+        $this->db->insert('Avis', $insertValues);
+
+        $idArray = $this->db->fetchAssoc("select idAvis from Avis order by idAvis desc");
+        $id = $idArray['idAvis'];
         $insertValues = [
             "idAvis" => $id,
             "idRestaurant" => $args['id']
