@@ -53,15 +53,6 @@ class ComentaryApiTest extends BaseTestCase
         $this->assertEquals(400, $response->getStatusCode());
     }
 
-    public function testCommentaryCreateNoName()
-    {
-        $response = $this->runApp('POST', '/commentary/create/1', [
-            'Commentaire' => 'TestCom'
-        ]);
-
-        $this->assertEquals(200, $response->getStatusCode());
-    }
-
     public function testCommentaryCreateWrongParam()
     {
         $response = $this->runApp('POST', '/commentary/create/1', [
